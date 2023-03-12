@@ -36,10 +36,10 @@ function onSubmit(event) {
       Notiflix.Notify.failure(
         'Sorry, there are no images matching your search query. Please try again.'
       );
-      loadMoreBtn.classList.add('hidden');
+      loadMoreBtn.style.display = 'none';
     } else {
       displayImages(data.hits);
-      loadMoreBtn.classList.remove('hidden');
+      loadMoreBtn.style.display = 'block';
 
       const lightbox = new SimpleLightbox('.gallery a');
       lightbox.refresh();
@@ -56,12 +56,21 @@ function onLoadMore() {
   const searchQuery = inputEl.value.trim();
   searchImages(searchQuery, page).then(data => {
     if (data.hits.length === 0) {
-      loadMoreBtn.classList.add('hidden');
+      loadMoreBtn.style.display = 'none';
+      Notiflix.Notify.info(
+        "We're sorry, but you've reached the end of search results."
+      );
     } else {
       displayImages(data.hits);
 
       const lightbox = new SimpleLightbox('.gallery a');
       lightbox.refresh();
+    }
+    if (data.totalHits === galleryEl.children.length) {
+      loadMoreBtn.style.display = 'none';
+      Notiflix.Notify.info(
+        "We're sorry, but you've reached the end of search results."
+      );
     }
   });
 }
